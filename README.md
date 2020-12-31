@@ -1,2 +1,3 @@
 # buildnumbers
-Internal tool that hands out build numbers
+
+Internal tool that keeps track of and hands out build numbers.
