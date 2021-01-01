@@ -108,7 +108,7 @@ func main() {
 	var buildNumbersMap map[string]int
 	release, _, err := client.Repositories.GetRelease(ctx, owner, reponame, releaseId)
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
 	}
 	buildNumbersMap = jsonStringToMap(release.GetBody())
 
@@ -148,10 +148,15 @@ func main() {
 
 	fmt.Printf("%#s%#s%#v\n", buildtrain, minor, buildNumberForThisBuildtrainAndMinor)
 
-	// Save the new JSON string in Storage
-	buildNumbersJsonString := mapToJsonString(buildNumbersMap)
-	// fmt.Println(buildNumbersJsonString)
-	release.Body = github.String(buildNumbersJsonString)
-	client.Repositories.EditRelease(ctx, owner,reponame,releaseId,release)
+	if os.Getenv("PERSIST_NEW_BUILDNUMBER") == "YES" {
+		// Save the new JSON string in Storage
+		buildNumbersJsonString := mapToJsonString(buildNumbersMap)
+		// fmt.Println(buildNumbersJsonString)
+		release.Body = github.String(buildNumbersJsonString)
+		_, _, err = client.Repositories.EditRelease(ctx, owner,reponame,releaseId,release)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 
 }
