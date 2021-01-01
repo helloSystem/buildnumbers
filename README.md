@@ -6,6 +6,6 @@ For the versioning, we are roughly following [this scheme](https://tidbits.com/2
 
 This tool hands out the build numbers to Cirrus CI roughly.
 
-In order to do this, it needs to persist the last handed out build number per minor version somewhere.
+In order to do this, it needs to persist the last handed out build number per minor version somewhere if the `PERSIST_NEW_BUILDNUMBER` environment variable is set to `YES` (this should be done for _one_ of the builds in a build matrix, so that all builds of that matrix get the same build number).
 For this, the description field of the GitHub Release (described by `RELEASE_ID_FOR_STORAGE`)
 is used as the storage to keep track of which build numbers have already been handed out.
